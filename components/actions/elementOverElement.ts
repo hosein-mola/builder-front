@@ -1,5 +1,5 @@
 import { Active, DragEndEvent, Over } from "@dnd-kit/core";
-import { nanoid } from "nanoid";
+import { ulid } from "ulid";
 import { ElementType, FormElementInstance, FormElements } from '@/components/FormElement';
 import useDesigner from "../hooks/useDesigner";
 import { ContextType } from "../context/DesignerContext";

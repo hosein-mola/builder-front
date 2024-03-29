@@ -1,5 +1,5 @@
 import { Active, DragEndEvent, Over } from "@dnd-kit/core";
-import { nanoid } from "nanoid";
+import { ulid } from "ulid";
 import { ElementType, FormElementInstance, FormElements } from '@/components/FormElement';
 import useDesigner from "../hooks/useDesigner";
 import { ContextType } from "../context/DesignerContext";
@@ -11,7 +11,7 @@ export function elementOverPanel(event: DragEndEvent, selectedPage: number, cont
     if (overType == "panel") {
         if (isDesignerBtnElement) {
             const type = active?.data?.current?.type;
-            const newElement = FormElements[type as ElementType].construct(nanoid(10), null, selectedPage);
+            const newElement = FormElements[type as ElementType].construct(ulid(10), null, selectedPage);
             addElement(elements.length, newElement, over?.data?.current?.extraAttributes.id, selectedPage);
         } else {
             const elementIndex = elements.findIndex(el => el.id == active?.data?.current?.elementId);

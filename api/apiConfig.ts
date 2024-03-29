@@ -8,7 +8,7 @@ interface Axios {
 const api: Axios = {
     v1: axios.create({
         baseURL: SERVER,
-        timeout: 5000,
+        timeout: 9000000,
         headers: {
             "Accept": "*/*",
             'Content-Type': 'application/json',

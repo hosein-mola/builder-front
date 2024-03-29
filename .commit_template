@@ -1,0 +1,13 @@
+[Short description]
+
+## Description:
+- [Briefly describe the changes made]
+
+## Type:
+- feat: New feature added
+- fix: Bug fix
+- refactor: Code refactoring
+- docs: Documentation update
+- style: Code style/formatting changes
+- test: Adding or modifying tests
+- chore: Routine tasks (e.g., dependency updates)

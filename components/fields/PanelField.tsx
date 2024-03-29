@@ -24,7 +24,7 @@ import { cn } from '@/lib/utils';
 import { LuHeading1 } from 'react-icons/lu';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import Designer, { DesignerElementWrapper } from '../Designer';
-import { nanoid } from 'nanoid';
+import { ulid } from 'ulid';
 
 const type: ElementType = "panel";
 

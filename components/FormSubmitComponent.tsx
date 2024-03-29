@@ -4,7 +4,7 @@ import { FormElementInstance, FormElements } from './FormElement'
 import { Button } from './ui/button'
 import { HiCursorClick } from 'react-icons/hi'
 import { toast } from './ui/use-toast'
-import { nanoid } from 'nanoid'
+import { ulid } from 'ulid'
 import { ImSpinner } from 'react-icons/im'
 import { SubmitForm } from '@/actions/form'
 
@@ -17,7 +17,7 @@ function FormSubmitComponent({
 }) {
     const formValues = useRef<{ [key: string]: string }>({});
     const formErrors = useRef<{ [key: string]: boolean }>({});
-    const [renderkey, setRenderKey] = useState(nanoid(10));
+    const [renderkey, setRenderKey] = useState(ulid(10));
     const [submitted, setSubmitted] = useState(false);
     const [pending, transition] = useTransition();
 
@@ -43,7 +43,7 @@ function FormSubmitComponent({
         formErrors.current = {};
         const validForm = validateForm();
         if (!validForm) {
-            setRenderKey(nanoid(10));
+            setRenderKey(ulid(10));
             toast({
                 title: "invalid",
                 description: "the form is invalid",

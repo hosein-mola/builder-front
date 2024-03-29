@@ -38,21 +38,19 @@ export async function GetForms() {
 }
 
 export async function GetFormById(id: number) {
-    const response = await api.v1.get(`/forms/${id}`);
-    const { collection } = response.data;
-    return collection.form;
+    try {
+        const response = await api.v1.get(`/forms/${id}`);
+        const { collection } = response.data;
+        return collection.form;
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 export async function UpdateFormContent(id: number, jsonContent: string) {
-    return await prisma.form.update({
-        where: {
-            userId: user.id,
-            id
-        },
-        data: {
-            context: jsonContent
-        }
-    })
+    const response = await api.v1.put(`/forms/${String(id)}`, jsonContent, { method: 'PUT' });
+    console.log("🚀 ~ UpdateFormContent ~ id:", response);
 }
 
 export async function PublishForm(formId: number) {

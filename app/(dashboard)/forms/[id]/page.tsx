@@ -10,12 +10,12 @@ import { TbArrowBounce } from 'react-icons/tb';
 import { StatsCard } from '../../page';
 import { ElementType, FormElementInstance } from '@/components/FormElement';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { nanoid } from 'nanoid';
+import { ulid } from 'ulid';
 
 async function FormDetailPage({ params }: {
-    params: { id: string }
+    params: { id: number }
 }) {
-    const form = await GetFormById(Number(params.id));
+    const form = await GetFormById(params.id);
 
     if (!form) {
         throw new Error('form not found');
@@ -115,7 +115,7 @@ async function SubmissionsTable({ id }: { id: number }) {
 
     formElements.forEach(element => {
         switch (element.type) {
-            case "TextField":
+            case "text":
                 columns.push({
                     id: element.id,
                     label: element?.extraAttributes?.label,

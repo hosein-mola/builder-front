@@ -52,7 +52,7 @@ function FormBuilder({ form }: { form: Form }) {
     useEffect(() => {
         if (isReady) return;
         console.log('components form data', form as any);
-        setElements(form as any);
+        setElements((form as any).components);
         const readyTimeout = setTimeout(() => setIsReady(true), 500);
         () => {
             clearTimeout(readyTimeout);
