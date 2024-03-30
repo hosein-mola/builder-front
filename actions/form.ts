@@ -1,3 +1,4 @@
+import { FormElementInstance } from './../components/FormElement';
 "use server"
 
 import api from '@/api/apiConfig';
@@ -39,8 +40,10 @@ export async function GetForms() {
 
 export async function GetFormById(id: number) {
     try {
+
         const response = await api.v1.get(`/forms/${id}`);
         const { collection } = response.data;
+        console.log('test', collection.form);
         return collection.form;
     } catch (error) {
         console.log(error);
@@ -48,8 +51,9 @@ export async function GetFormById(id: number) {
 
 }
 
-export async function UpdateFormContent(id: number, jsonContent: string) {
-    const response = await api.v1.put(`/forms/${String(id)}`, jsonContent, { method: 'PUT' });
+export async function UpdateFormContent(id: number, componenets: FormElementInstance[]) {
+    console.log('js', componenets);
+    const response = await api.v1.put(`/forms/${String(id)}`, componenets, { method: 'PUT' });
     console.log("🚀 ~ UpdateFormContent ~ id:", response);
 }
 

@@ -47,8 +47,8 @@ function DragOverlayWrapper() {
 
     const isDesignerElement = draggedItem?.data?.current?.isDesignerElement;
     if (isDesignerElement == true) {
-        const elementId = draggedItem?.data?.current?.elementId;
-        const element = elements.find(el => el.id == elementId);
+        const id = draggedItem?.data?.current?.id;
+        const element = elements.find(el => el.id == id);
         if (element == null) {
             node = <div>element not found</div>
         } else {

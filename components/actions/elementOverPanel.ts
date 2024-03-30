@@ -8,15 +8,20 @@ export function elementOverPanel(event: DragEndEvent, selectedPage: number, cont
     const { active, over } = event;
     const isDesignerBtnElement = active?.data?.current?.isDesignerBtnElement;
     const overType = over?.data?.current?.type;
+    const isDroppingOverDesignerElementTopHalf = over?.data?.current?.isTopHalfDesigner ?? false;
+    const isDroppingOverDesignerElementBottomHalf = over?.data?.current?.isButtomHalfDesigner ?? false;
+    const isDroppingOverDesignerElement = isDroppingOverDesignerElementTopHalf || isDroppingOverDesignerElementBottomHalf;
     if (overType == "panel") {
-        if (isDesignerBtnElement) {
+        if (isDesignerBtnElement && !isDroppingOverDesignerElement) {
             const type = active?.data?.current?.type;
             const newElement = FormElements[type as ElementType].construct(ulid(10), null, selectedPage);
             addElement(elements.length, newElement, over?.data?.current?.extraAttributes.id, selectedPage);
-        } else {
-            const elementIndex = elements.findIndex(el => el.id == active?.data?.current?.elementId);
+        }
+        if (!isDroppingOverDesignerElement) {
+            const elementIndex = elements.findIndex(el => el.id == active?.data?.current?.id);
+            console.log('elementIndex', over?.data?.current?.extraAttributes?.id);
             if (elementIndex !== -1) {
-                updateParent(elements[elementIndex], over?.data?.current?.extraAttributes.id);
+                updateParent(elements[elementIndex], over?.data?.current?.extraAttributes?.id);
             }
         }
     }

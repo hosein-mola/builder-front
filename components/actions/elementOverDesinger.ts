@@ -18,7 +18,7 @@ export function elementOverDesigner(event: DragEndEvent, selectedPage: number, c
         if (elements && selectedPage) {
             console.log('test selected page');
             console.log('selected page of area', active?.data?.current);
-            const activeIndex = elements.findIndex((element: FormElementInstance) => element.id == active?.data?.current?.elementId);
+            const activeIndex = elements.findIndex((element: FormElementInstance) => element.id == active?.data?.current?.id);
             console.log("🚀 ~ elementOverDesigner ~ activeIndex:", activeIndex)
             if (activeIndex == -1) return;
             const cloneElements = [...elements];

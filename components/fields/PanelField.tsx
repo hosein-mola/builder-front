@@ -29,9 +29,9 @@ import { ulid } from 'ulid';
 const type: ElementType = "panel";
 
 const extraAttributes = {
+    id: '',
     title: "title field",
     state: [],
-    id: "",
     cols: "4",
     span: '1',
 }
@@ -44,13 +44,16 @@ const propertiesSchema = z.object({
 
 export const PanelFieldElement: FormElement = {
     type,
-    construct: (id: string, parentId: string | null, page: number) => ({
-        id,
-        type,
-        parentId,
-        page,
-        extraAttributes
-    }),
+    construct: (id: string, parentId: string | null, page: number) => {
+        extraAttributes.id = id;
+        return ({
+            id,
+            type,
+            parentId,
+            page,
+            extraAttributes
+        })
+    },
     designerBtnElement: {
         icon: VscLayoutSidebarRightOff,
         label: 'Panel field'

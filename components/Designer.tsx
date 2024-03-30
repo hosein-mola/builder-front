@@ -108,7 +108,7 @@ function Designer() {
                                     }}
                                     key={parent.id + 'nested'}
                                     className={cn('h-auto px-4 text-xs py-1 rounded-l-full flex  flex-row items-center gap-2 w-fit  bg-blue-700 ',
-                                        parent?.type == "PanelField" && red[selectedElementParents.length - index - 1],
+                                        parent?.type == "panel" && red[selectedElementParents.length - index - 1],
                                     )}>
                                     <div
                                         dir='rtl'
@@ -165,7 +165,7 @@ export function DesignerElementWrapper({ element, index, row }: { element: FormE
         id: element.id + '-top',
         data: {
             type: element.type,
-            elementId: element.id,
+            id: element.id,
             isTopHalfDesigner: true
         }
     });
@@ -173,8 +173,11 @@ export function DesignerElementWrapper({ element, index, row }: { element: FormE
         id: element.id + '-bottom',
         data: {
             type: element.type,
-            elementId: element.id,
-            isButtomHalfDesigner: true
+            id: element.id,
+            isButtomHalfDesigner: true,
+            extraAttributes: {
+                id: element.id,
+            }
         }
     });
 
@@ -182,8 +185,11 @@ export function DesignerElementWrapper({ element, index, row }: { element: FormE
         id: element.id + "-drag-handler",
         data: {
             type: element.type,
-            elementId: element.id,
-            isDesignerElement: true
+            id: element.id,
+            isDesignerElement: true,
+            extraAttributes: {
+                id: element.id,
+            }
         }
     });
 
@@ -206,7 +212,7 @@ export function DesignerElementWrapper({ element, index, row }: { element: FormE
             <div
                 dir='rtl'
                 className={cn('h-auto px-2   text-xs rounded-l-full  flex flex-row items-center gap-2 w-fit  bg-blue-700 ',
-                    element?.type == "PanelField" && "bg-violet-600",
+                    element?.type == "panel" && "bg-violet-600",
                 )}>
                 <div
                     dir='rtl'
@@ -225,7 +231,7 @@ export function DesignerElementWrapper({ element, index, row }: { element: FormE
             className={cn('flex relative border-muted-foreground/10 flex-col w-full min-h-[2rem] h-auto    ',
                 row && "flex-row",
                 selectedElement?.id == element.id && "border border-blue-700 ",
-                selectedElement?.id == element.id && element?.type == "PanelField" && "border-violet-600"
+                selectedElement?.id == element.id && element?.type == "panel" && "border-violet-600"
             )}>
             {draggble.active && <div ref={topHalf.setNodeRef} className={cn("absolute z-[10] right-0 h-full flex-grow  min-w-[2rem] max-w-[2rem] opacity-100",
                 !row && "h-1/4 min-w-full left-0 right-0 top-0 z-[99]  ",

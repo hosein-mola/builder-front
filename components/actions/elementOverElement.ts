@@ -16,9 +16,8 @@ export function elementOverElement(event: DragEndEvent, selectedPage: number, co
     const droppingSidebarButtonOverDesingerElement = isDesignerBtnElement && isDroppingOverDesignerElement;
     const draggingDesignerElementOverAnotherDesignerElement = isDroppingOverDesignerElement && isDraggingDesignerElement;
     if (draggingDesignerElementOverAnotherDesignerElement) {
-        console.log("🚀 ~ elementOverElement ~ elementOverElement:")
-        const activeId = active.data.current?.elementId;
-        const overId = over?.data.current?.elementId;
+        const activeId = active.data.current?.id;
+        const overId = over?.data.current?.id;
         const activeElementIndex = elements.findIndex(el => el.id == activeId);
         const overElementIndex = elements.findIndex(el => el.id == overId);
         if (activeElementIndex == -1 || overElementIndex == -1) {

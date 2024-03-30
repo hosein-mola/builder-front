@@ -16,7 +16,7 @@ export function sidebarOverElement(event: DragEndEvent, selectedPage: number, co
     if (droppingSidebarButtonOverDesingerElement) {
         const type = active?.data?.current?.type;
         const newElement = FormElements[type as ElementType].construct(ulid(10), null, selectedPage);
-        const overId = over?.data?.current?.elementId;
+        const overId = over?.data?.current?.id;
         const overElementIndex = elements?.findIndex(el => el.id == overId);
         if (overElementIndex === -1) {
             throw new Error('Element not found');
