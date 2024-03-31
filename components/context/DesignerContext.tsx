@@ -74,7 +74,6 @@ export default function DesignerContextProvider({
     const addElement = (index: number, element: FormElementInstance, parentId: string | null, page: number) => {
         setElements(prev => {
             const newElement = [...prev];
-            element.index = index;
             element.parentId = parentId;
             element.page = page;
             newElement.splice(index, 0, element);

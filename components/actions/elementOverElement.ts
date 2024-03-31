@@ -4,16 +4,80 @@ import { ElementType, FormElementInstance, FormElements } from '@/components/For
 import useDesigner from "../hooks/useDesigner";
 import { ContextType } from "../context/DesignerContext";
 
+function calculateNewIndex(draggedIndex: number, droppedIndex: number, isAbove: boolean): number {
+    if (draggedIndex === droppedIndex) {
+        return draggedIndex; // If the dragged and dropped indices are the same, return the same index
+    }
+    if (isAbove) {
+        if (draggedIndex < droppedIndex) {
+            return droppedIndex - 1; // If dropped above and dragged index is less than dropped index, adjust by -1
+        } else {
+            return droppedIndex; // If dropped above and dragged index is greater than dropped index, no change needed
+        }
+    } else {
+        if (draggedIndex < droppedIndex) {
+            return droppedIndex; // If dropped below and dragged index is less than dropped index, no change needed
+        } else {
+            return droppedIndex + 1; // If dropped below and dragged index is greater than dropped index, adjust by +1
+        }
+    }
+}
+// Function to reindex items
+function reindexItems(items: any, dragIndex: number, dropIndex: number, isAbove: boolean, selectedPage: number): any {
+    let cloneItems = [...items];
+    const newDropItem = calculateNewIndex(dragIndex, dropIndex, isAbove);
+    console.log(newDropItem, dragIndex);
+
+    function swapItems<T>(arr: T[], dragIndex: number, dropIndex: number): any {
+        // Check if the indices are valid
+        if (dragIndex < 0 || dragIndex >= arr.length || dropIndex < 0 || dropIndex >= arr.length) {
+            console.error("Invalid indices provided");
+            return;
+        }
+
+        // // Swap the items
+        // const temp = arr[dragIndex];
+        // arr[dragIndex] = arr[dropIndex];
+        // arr[dropIndex] = temp;
+        return arr;
+    }
+
+    function moveItem<T>(arr: any, sourceIndex: number, destinationIndex: number, prevDropIndex: number): any {
+        // Check if the indices are valid
+        if (sourceIndex < 0 || sourceIndex >= arr.length || destinationIndex < 0 || destinationIndex >= arr.length) {
+            console.error("Invalid indices provided");
+            return;
+        }
+        arr[sourceIndex].page = selectedPage;
+        console.log('parentID', arr[prevDropIndex]);
+        arr[sourceIndex].parentId = arr[prevDropIndex].parentId;
+        // Remove the item from the source position
+        const itemToMove = arr.splice(sourceIndex, 1)[0];
+
+        // Insert the item into the destination position
+        arr.splice(destinationIndex, 0, itemToMove);
+        return arr;
+    }
+
+    cloneItems = moveItem(cloneItems, dragIndex, newDropItem, dropIndex);
+    console.log('clone', cloneItems);
+    const reIndexed = cloneItems.map((item, index) => {
+        item.index = index;
+        return item;
+    });
+    console.log('reindex item', reIndexed);
+
+    return reIndexed;
+}
+
+
 export function elementOverElement(event: DragEndEvent, selectedPage: number, context: ContextType) {
-    const { elements, addElement, updateIndex, removeElement } = context;
+    const { elements, addElement, setElements, updateIndex, removeElement } = context;
     const { active, over } = event;
-    console.log("🚀 ~ elementOverElement ~ active:", active);
-    const isDesignerBtnElement = active?.data?.current?.isDesignerBtnElement;
     const isDraggingDesignerElement = active?.data?.current?.isDesignerElement;
     const isDroppingOverDesignerElementTopHalf = over?.data?.current?.isTopHalfDesigner ?? false;
     const isDroppingOverDesignerElementBottomHalf = over?.data?.current?.isButtomHalfDesigner ?? false;
     const isDroppingOverDesignerElement = isDroppingOverDesignerElementTopHalf || isDroppingOverDesignerElementBottomHalf;
-    const droppingSidebarButtonOverDesingerElement = isDesignerBtnElement && isDroppingOverDesignerElement;
     const draggingDesignerElementOverAnotherDesignerElement = isDroppingOverDesignerElement && isDraggingDesignerElement;
     if (draggingDesignerElementOverAnotherDesignerElement) {
         const activeId = active.data.current?.id;
@@ -23,36 +87,9 @@ export function elementOverElement(event: DragEndEvent, selectedPage: number, co
         if (activeElementIndex == -1 || overElementIndex == -1) {
             throw new Error('element not found');
         }
-        const isReversed = overElementIndex <= activeElementIndex;
-        const activeElement = { ...elements[activeElementIndex] };
-        removeElement(activeId);
-        let indexForNewElement = overElementIndex - 1 <= 0 ? 0 : overElementIndex - 1;
-        if (isReversed) {
-            indexForNewElement = overElementIndex;
-        }
-        if (isDroppingOverDesignerElementBottomHalf) {
-            if (isReversed) {
-                indexForNewElement = overElementIndex + 1;
-            } else {
-                indexForNewElement = overElementIndex;
-            }
-        }
-
-        let indexForOldELement = activeElementIndex - 1 <= 0 ? 0 : activeElementIndex - 1;
-        if (isReversed) {
-            indexForOldELement = activeElementIndex;
-        }
-        if (isDroppingOverDesignerElementBottomHalf) {
-            if (isReversed) {
-                indexForOldELement = activeElementIndex + 1;
-            } else {
-                indexForOldELement = activeElementIndex;
-            }
-        }
-
-        updateIndex(elements[overElementIndex], indexForNewElement);
-
-        addElement(indexForNewElement, activeElement, elements[overElementIndex].parentId, selectedPage);
+        let newIndexForActiveElement = reindexItems(elements, activeElementIndex, overElementIndex, isDroppingOverDesignerElementTopHalf, selectedPage);
+        console.log("🚀 ~ elementOverElement ~ reIndexdElements:", newIndexForActiveElement)
+        setElements(newIndexForActiveElement);
     } else {
         console.log('else');
     }
