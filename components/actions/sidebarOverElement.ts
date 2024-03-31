@@ -7,6 +7,7 @@ import { ContextType } from "../context/DesignerContext";
 export function sidebarOverElement(event: DragEndEvent, selectedPage: number, context: ContextType) {
     const { elements, addElement, removeElement } = context;
     const { active, over } = event;
+
     const isDroppingOverDesignerElementTopHalf = over?.data?.current?.isTopHalfDesigner ?? false;
     const isDroppingOverDesignerElementBottomHalf = over?.data?.current?.isButtomHalfDesigner ?? false;
     const isDroppingOverDesignerElement = isDroppingOverDesignerElementTopHalf || isDroppingOverDesignerElementBottomHalf;
@@ -14,9 +15,10 @@ export function sidebarOverElement(event: DragEndEvent, selectedPage: number, co
     const droppingSidebarButtonOverDesingerElement = isDesignerBtnElement && isDroppingOverDesignerElement;
     if (elements == undefined) return;
     if (droppingSidebarButtonOverDesingerElement) {
-        const type = active?.data?.current?.type;
-        const newElement = FormElements[type as ElementType].construct(ulid(10), null, selectedPage);
+        const overType = over?.data?.current?.type;
         const overId = over?.data?.current?.id;
+        const type = active?.data?.current?.type;
+        const newElement = FormElements[type as ElementType].construct(ulid(10), overId, null, selectedPage);
         const overElementIndex = elements?.findIndex(el => el.id == overId);
         if (overElementIndex === -1) {
             throw new Error('Element not found');

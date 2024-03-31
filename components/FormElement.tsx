@@ -10,7 +10,7 @@ export type ElementType = "panel" | "text";
 
 export type SubmitFunction = (key: string, value: string) => void;
 export type FormElement = {
-    construct: (id: string, parentId: string | null, page: number) => FormElementInstance;
+    construct: (id: string, index: number, parentId: string | null, page: number) => FormElementInstance;
     type: ElementType;
     designerBtnElement: {
         icon: IconType;
@@ -33,6 +33,7 @@ export type FormElement = {
 
 export type FormElementInstance = {
     id: string;
+    index: number,
     type: ElementType;
     parentId: string | null;
     page: number;

@@ -8,13 +8,14 @@ export function elementOverPanel(event: DragEndEvent, selectedPage: number, cont
     const { active, over } = event;
     const isDesignerBtnElement = active?.data?.current?.isDesignerBtnElement;
     const overType = over?.data?.current?.type;
+    const overId = over?.data?.current?.id;
     const isDroppingOverDesignerElementTopHalf = over?.data?.current?.isTopHalfDesigner ?? false;
     const isDroppingOverDesignerElementBottomHalf = over?.data?.current?.isButtomHalfDesigner ?? false;
     const isDroppingOverDesignerElement = isDroppingOverDesignerElementTopHalf || isDroppingOverDesignerElementBottomHalf;
     if (overType == "panel") {
         if (isDesignerBtnElement && !isDroppingOverDesignerElement) {
             const type = active?.data?.current?.type;
-            const newElement = FormElements[type as ElementType].construct(ulid(10), null, selectedPage);
+            const newElement = FormElements[type as ElementType].construct(ulid(10), overId, null, selectedPage);
             addElement(elements.length, newElement, over?.data?.current?.extraAttributes.id, selectedPage);
         }
         if (!isDroppingOverDesignerElement) {

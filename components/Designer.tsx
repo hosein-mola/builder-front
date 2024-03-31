@@ -146,7 +146,7 @@ function Designer() {
                     )}
                     <div>
                         {elements.length > 0 && <div className='flex flex-col    w-full gap-2 p-5'>
-                            {elements.filter(el => el.page == selectedPage).filter(el => el.parentId == null).map((element, index) => {
+                            {elements.filter(el => el.page == selectedPage).filter(el => el.parentId == null).sort((a: FormElementInstance, b: FormElementInstance) => a.index - b.index).map((element, index) => {
                                 return <DesignerElementWrapper key={element.id + index} element={element} index={index} row={false} />
                             })}
                         </div>}

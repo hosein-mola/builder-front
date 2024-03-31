@@ -15,6 +15,7 @@ export type DesignerContextType = {
     setActive: Dispatch<SetStateAction<Active | null>>,
     addElement: (index: number, element: FormElementInstance, parentId: string | null, page: number) => void
     updateParent: (element: FormElementInstance, parentId: string | null) => void
+    updateIndex: (element: FormElementInstance, index: number) => void
     removeElement: (id: string) => void,
     setElements: Dispatch<SetStateAction<FormElementInstance[]>>,
     setSelectedElement: Dispatch<SetStateAction<FormElementInstance | null>>,
@@ -46,6 +47,8 @@ export default function DesignerContextProvider({
     const swapElement = (fromIndex: number, toIndex: number) => {
         setElements(prev => {
             let copy = [...prev];
+            copy[fromIndex].index = toIndex;
+            copy[toIndex].index = fromIndex;
             [copy[fromIndex], copy[toIndex]] = [copy[toIndex], copy[fromIndex]];
             return copy;
         })
@@ -59,9 +62,19 @@ export default function DesignerContextProvider({
             return newElement;
         })
     }
+    const updateIndex = (element: FormElementInstance, index: number) => {
+        setElements(prev => {
+            const newElement = [...prev];
+            element.index = index;
+            const elementIndex = newElement.findIndex(el => el.id == element.id);
+            newElement[elementIndex] = element;
+            return newElement;
+        })
+    }
     const addElement = (index: number, element: FormElementInstance, parentId: string | null, page: number) => {
         setElements(prev => {
             const newElement = [...prev];
+            element.index = index;
             element.parentId = parentId;
             element.page = page;
             newElement.splice(index, 0, element);
@@ -117,6 +130,7 @@ export default function DesignerContextProvider({
         addElement,
         updateSelectedParents,
         updateParent,
+        updateIndex,
         swapElement,
         removeElement,
         setElements,

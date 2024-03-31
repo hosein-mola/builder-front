@@ -8,13 +8,15 @@ import { ContextType } from "../context/DesignerContext";
 export function sidebarOverDesigner(event: DragEndEvent, selectedPage: number | undefined, context: ContextType) {
     const { elements, addElement, removeElement } = context;
     const { active, over } = event;
+    const overType = over?.data?.current?.type;
+    const overId = over?.data?.current?.id;
     const isDroppingOverDesignerArea = over?.data?.current?.isDesignerDropArea;
     const isDesignerBtnElement = active?.data?.current?.isDesignerBtnElement;
     const droppingSidebarButtonOverDesignerArea = isDesignerBtnElement && isDroppingOverDesignerArea;
     if (droppingSidebarButtonOverDesignerArea) {
         const type = active?.data?.current?.type;
         if (elements && selectedPage) {
-            const newElement = FormElements[type as ElementType].construct(ulid(10), null, selectedPage);
+            const newElement = FormElements[type as ElementType].construct(ulid(10), overId, null, selectedPage);
             addElement(elements.length, newElement, null, selectedPage);
         }
     }

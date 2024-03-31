@@ -43,10 +43,11 @@ const propertiesSchema = z.object({
 
 export const TextFieldFormElement: FormElement = {
     type,
-    construct: (id: string, parentId: string | null, page: number) => {
+    construct: (id: string, index: number, parentId: string | null, page: number) => {
         extraAttributes.id = id;
         return ({
             id,
+            index,
             type,
             page,
             parentId,

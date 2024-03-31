@@ -5,7 +5,7 @@ import useDesigner from "../hooks/useDesigner";
 import { ContextType } from "../context/DesignerContext";
 
 export function elementOverElement(event: DragEndEvent, selectedPage: number, context: ContextType) {
-    const { elements, addElement, removeElement } = context;
+    const { elements, addElement, updateIndex, removeElement } = context;
     const { active, over } = event;
     console.log("🚀 ~ elementOverElement ~ active:", active);
     const isDesignerBtnElement = active?.data?.current?.isDesignerBtnElement;
@@ -37,6 +37,21 @@ export function elementOverElement(event: DragEndEvent, selectedPage: number, co
                 indexForNewElement = overElementIndex;
             }
         }
+
+        let indexForOldELement = activeElementIndex - 1 <= 0 ? 0 : activeElementIndex - 1;
+        if (isReversed) {
+            indexForOldELement = activeElementIndex;
+        }
+        if (isDroppingOverDesignerElementBottomHalf) {
+            if (isReversed) {
+                indexForOldELement = activeElementIndex + 1;
+            } else {
+                indexForOldELement = activeElementIndex;
+            }
+        }
+
+        updateIndex(elements[overElementIndex], indexForNewElement);
+
         addElement(indexForNewElement, activeElement, elements[overElementIndex].parentId, selectedPage);
     } else {
         console.log('else');
