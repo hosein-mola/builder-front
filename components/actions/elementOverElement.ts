@@ -60,16 +60,18 @@ function reindexItems(items: any, dragIndex: number, dropIndex: number, isAbove:
     }
 
     cloneItems = moveItem(cloneItems, dragIndex, newDropItem, dropIndex);
-    console.log('clone', cloneItems);
     const reIndexed = cloneItems.map((item, index) => {
         item.index = index;
         return item;
     });
     console.log('reindex item', reIndexed);
-
     return reIndexed;
 }
 
+const reIndexed = (items: FormElementInstance[]) => items.map((item, index) => {
+    item.index = index;
+    return item;
+});
 
 export function elementOverElement(event: DragEndEvent, selectedPage: number, context: ContextType) {
     const { elements, addElement, setElements, updateIndex, removeElement } = context;

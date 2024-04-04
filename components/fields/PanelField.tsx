@@ -45,6 +45,7 @@ const propertiesSchema = z.object({
 export const PanelFieldElement: FormElement = {
     type,
     construct: (id: string, index: number, parentId: string | null, page: number) => {
+        console.log('test index', index);
         extraAttributes.id = id;
         return ({
             id,
