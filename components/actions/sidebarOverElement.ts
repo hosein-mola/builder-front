@@ -18,8 +18,7 @@ export function sidebarOverElement(event: DragEndEvent, selectedPage: number, co
         const overType = over?.data?.current?.type;
         const overId = over?.data?.current?.id;
         const type = active?.data?.current?.type;
-        console.log('over', over);
-        const newElement = FormElements[type as ElementType].construct(ulid(10), 0, null, selectedPage);
+        const overIndex = over?.data?.current?.index;
         const overElementIndex = elements?.findIndex(el => el.id == overId);
         if (overElementIndex === -1) {
             throw new Error('Element not found');
@@ -28,6 +27,7 @@ export function sidebarOverElement(event: DragEndEvent, selectedPage: number, co
         if (isDroppingOverDesignerElementBottomHalf) {
             indexForNewElement = overElementIndex + 1;
         }
+        const newElement = FormElements[type as ElementType].construct(ulid(10), indexForNewElement, null, selectedPage);
         addElement(indexForNewElement, newElement, elements[overElementIndex].parentId, selectedPage);
     }
 }

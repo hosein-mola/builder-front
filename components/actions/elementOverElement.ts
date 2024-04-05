@@ -26,22 +26,17 @@ function calculateNewIndex(draggedIndex: number, droppedIndex: number, isAbove: 
 function reindexItems(items: any, dragIndex: number, dropIndex: number, isAbove: boolean, selectedPage: number): any {
     let cloneItems = [...items];
     const newDropItem = calculateNewIndex(dragIndex, dropIndex, isAbove);
-    console.log(newDropItem, dragIndex);
-
     function swapItems<T>(arr: T[], dragIndex: number, dropIndex: number): any {
         // Check if the indices are valid
         if (dragIndex < 0 || dragIndex >= arr.length || dropIndex < 0 || dropIndex >= arr.length) {
-            console.error("Invalid indices provided");
             return;
         }
-
         // // Swap the items
         // const temp = arr[dragIndex];
         // arr[dragIndex] = arr[dropIndex];
         // arr[dropIndex] = temp;
         return arr;
     }
-
     function moveItem<T>(arr: any, sourceIndex: number, destinationIndex: number, prevDropIndex: number): any {
         // Check if the indices are valid
         if (sourceIndex < 0 || sourceIndex >= arr.length || destinationIndex < 0 || destinationIndex >= arr.length) {
@@ -49,7 +44,6 @@ function reindexItems(items: any, dragIndex: number, dropIndex: number, isAbove:
             return;
         }
         arr[sourceIndex].page = selectedPage;
-        console.log('parentID', arr[prevDropIndex]);
         arr[sourceIndex].parentId = arr[prevDropIndex].parentId;
         // Remove the item from the source position
         const itemToMove = arr.splice(sourceIndex, 1)[0];
@@ -64,11 +58,10 @@ function reindexItems(items: any, dragIndex: number, dropIndex: number, isAbove:
         item.index = index;
         return item;
     });
-    console.log('reindex item', reIndexed);
     return reIndexed;
 }
 
-const reIndexed = (items: FormElementInstance[]) => items.map((item, index) => {
+export const reIndexed = (items: FormElementInstance[]) => items.map((item, index) => {
     item.index = index;
     return item;
 });
@@ -90,9 +83,7 @@ export function elementOverElement(event: DragEndEvent, selectedPage: number, co
             throw new Error('element not found');
         }
         let newIndexForActiveElement = reindexItems(elements, activeElementIndex, overElementIndex, isDroppingOverDesignerElementTopHalf, selectedPage);
-        console.log("🚀 ~ elementOverElement ~ reIndexdElements:", newIndexForActiveElement)
         setElements(newIndexForActiveElement);
     } else {
-        console.log('else');
     }
 }

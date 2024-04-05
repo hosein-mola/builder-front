@@ -28,7 +28,6 @@ const PreviewDialogButton = () => {
                 <div className=' bg-accent bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)] flex flex-col flex-grow items-center justify-center p-4 overflow-y-auto'>
                     <div className='max-w-[980px] flex flex-col gap-4 flex-grow bg-background h-full w-full rounded-3xl p-8 overflow-y-auto'>
                         {elements.map(element => {
-                            console.log(elements);
                             const FormComponent = FormElements[element.type].formComponent;
                             return <FormComponent key={element.id} elementInstance={element} />
                         })}

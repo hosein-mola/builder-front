@@ -2,6 +2,7 @@
 import { Dispatch, ReactNode, SetStateAction, createContext, useState } from "react";
 import { FormElementInstance, FormElements } from "../FormElement";
 import { Active } from "@dnd-kit/core";
+import { reIndexed } from "../actions/elementOverElement";
 
 export type DesignerContextType = {
     context?: DesignerContextType,
@@ -77,6 +78,7 @@ export default function DesignerContextProvider({
             element.parentId = parentId;
             element.page = page;
             newElement.splice(index, 0, element);
+            reIndexed(newElement);
             return newElement;
         })
     }

@@ -85,7 +85,6 @@ function SortableItem(props: any) {
     };
 
     const switchPage = (event: MouseEvent) => {
-        console.log('run', props.id);
         event.stopPropagation();
         props.setSelectedPage(props.id)
     }

@@ -43,18 +43,14 @@ export async function GetFormById(id: number) {
 
         const response = await api.v1.get(`/forms/${id}`);
         const { collection } = response.data;
-        console.log('test', collection.form);
         return collection.form;
     } catch (error) {
-        console.log(error);
     }
 
 }
 
 export async function UpdateFormContent(id: number, componenets: FormElementInstance[]) {
-    console.log('js', componenets);
     const response = await api.v1.put(`/forms/${String(id)}`, componenets, { method: 'PUT' });
-    console.log("🚀 ~ UpdateFormContent ~ id:", response);
 }
 
 export async function PublishForm(formId: number) {

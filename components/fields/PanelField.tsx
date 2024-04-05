@@ -25,6 +25,19 @@ import { LuHeading1 } from 'react-icons/lu';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import Designer, { DesignerElementWrapper } from '../Designer';
 import { ulid } from 'ulid';
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 const type: ElementType = "panel";
 
@@ -34,18 +47,16 @@ const extraAttributes = {
     state: [],
     cols: "4",
     span: '1',
+    padding: '0.5',
+    paddingUnit: 'rem',
+    gap: '0'
 }
 
-const propertiesSchema = z.object({
-    title: z.string().min(2),
-    cols: z.string(),
-    span: z.string()
-});
+const propertiesSchema = z.record(z.string(), z.string().optional());
 
 export const PanelFieldElement: FormElement = {
     type,
     construct: (id: string, index: number, parentId: string | null, page: number) => {
-        console.log('test index', index);
         extraAttributes.id = id;
         return ({
             id,
@@ -91,7 +102,7 @@ function DesignerComponent({ elementInstance }: { elementInstance: FormElementIn
         className={cn('flex flex-col bg-background h-full flex-grow w-full cursor-default',
         )}
     >
-        <div className={cn('  grid grid-cols-2  border p-5 gap-y-1 gap-x-1 grow  min-h-[5rem] h-full ',
+        <div className={cn(' grid grid-cols-2  border p-5 gap-y-1 gap-x-1 grow  min-h-[5rem] h-full ',
             String(element.extraAttributes.cols) == "1" && "grid-cols-1",
             String(element.extraAttributes.cols) == "2" && "grid-cols-2",
             String(element.extraAttributes.cols) == "3" && "grid-cols-3",
@@ -104,7 +115,13 @@ function DesignerComponent({ elementInstance }: { elementInstance: FormElementIn
             String(element.extraAttributes.cols) == "10" && "grid-cols-10",
             String(element.extraAttributes.cols) == "11" && "grid-cols-11",
             String(element.extraAttributes.cols) == "12" && "grid-cols-12",
-        )}>
+        )}
+            style={{
+                ...element.extraAttributes,
+                gap: element.extraAttributes['gap'] + 'rem',
+                padding: element.extraAttributes['padding'] + element.extraAttributes['paddingUnit']
+            }}
+        >
             {elements.filter(el => el.parentId == element.id).map((element, index) => {
                 return <div
                     className={cn('h-full grow grid w-full ',
@@ -151,8 +168,7 @@ function PropertiesComponent({
     const element = elementInstance as CustomInstance;
 
     const form = useForm<propertiesFormSchemaType>({
-        resolver: zodResolver(propertiesSchema),
-        mode: "onBlur",
+        mode: "all",
         defaultValues: {
             title: element.extraAttributes.title,
         }
@@ -162,7 +178,7 @@ function PropertiesComponent({
         form.reset(element.extraAttributes);
     }, [element, form])
 
-    function applyChanges(values: propertiesFormSchemaType) {
+    function applyChanges(values: any) {
         updateElement(element.id, {
             ...element,
             extraAttributes: { ...values }
@@ -171,61 +187,108 @@ function PropertiesComponent({
     return <Form {...form}>
         <form onSubmit={(e) => {
             e.preventDefault();
-        }} onBlur={form.handleSubmit(applyChanges)} className='space-y-3'>
-            <FormField control={form.control} name={'title'} render={({ field }) => {
-                return <FormItem>
-                    <FormLabel>test</FormLabel>
-                    <FormControl>
-                        <Input
-                            {...field}
-                            onKeyDown={(e) => {
-                                if (e.key == 'Enter') e.currentTarget.blur();
+        }} onChange={form.handleSubmit(applyChanges)} className='flex flex-col space-y-3 gap-2'>
+            <Accordion type="single" collapsible className=''>
+                <AccordionItem value="item-1">
+                    <AccordionTrigger>Info</AccordionTrigger>
+                    <AccordionContent>
+                        <FormField control={form.control} name={'title'} render={({ field }) => {
+                            return <FormItem>
+                                <FormLabel>test</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        {...field}
+                                        onKeyDown={(e) => {
+                                            if (e.key == 'Enter') e.currentTarget.blur();
+                                        }} />
+                                </FormControl>
+                                <FormDescription>
+                                    title of the field
+                                </FormDescription>
+                                <FormDescription>
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>;
+                        }} />
+                    </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-2" className='flex flex-col gap-2'>
+                    <AccordionTrigger>Layout</AccordionTrigger>
+                    <AccordionContent className=''>
+                        <div className='grid grid-cols-3 gap-4'>
+                            <FormField control={form.control} name={'cols'} render={({ field }) => {
+                                return <FormItem>
+                                    <FormLabel>Cols</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            type='number'
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>;
                             }} />
-                    </FormControl>
-                    <FormDescription>
-                        title of the field
-                    </FormDescription>
-                    <FormDescription>
-                    </FormDescription>
-                    <FormMessage />
-                </FormItem>;
-            }} />
-            <FormField control={form.control} name={'cols'} render={({ field }) => {
-                return <FormItem>
-                    <FormLabel>cols</FormLabel>
-                    <FormControl>
-                        <Input
-                            {...field}
-                            onKeyDown={(e) => {
-                                if (e.key == 'Enter') e.currentTarget.blur();
+                            <FormField control={form.control} name={'span'} render={({ field }) => {
+                                return <FormItem>
+                                    <FormLabel>Span</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            type='number'
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>;
                             }} />
-                    </FormControl>
-                    <FormDescription>
-                        set number of cols
-                    </FormDescription>
-                    <FormDescription>
-                    </FormDescription>
-                    <FormMessage />
-                </FormItem>;
-            }} />
-            <FormField control={form.control} name={'span'} render={({ field }) => {
-                return <FormItem>
-                    <FormLabel>take</FormLabel>
-                    <FormControl>
-                        <Input
-                            {...field}
-                            onKeyDown={(e) => {
-                                if (e.key == 'Enter') e.currentTarget.blur();
+                            <FormField control={form.control} name={'gap'} render={({ field }) => {
+                                return <FormItem>
+                                    <FormLabel>Gap</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            type='number'
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>;
                             }} />
-                    </FormControl>
-                    <FormDescription>
-                        set number of take
-                    </FormDescription>
-                    <FormDescription>
-                    </FormDescription>
-                    <FormMessage />
-                </FormItem>;
-            }} />
+                        </div>
+                        <div className='mt-2 flex flex-row gap-1 p-1'>
+                            <FormField control={form.control} name={'padding'} render={({ field }) => {
+                                return <FormItem>
+                                    <FormLabel className='font-bold'>Padding</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type='number'
+                                            className='rounded-none'
+                                            {...field}
+                                            onKeyDown={(e) => {
+                                                if (e.key == 'Enter') e.currentTarget.blur();
+                                            }} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>;
+                            }} />
+                            <FormField control={form.control} name={'paddingUnit'} render={({ field }) => {
+                                return <FormItem>
+                                    <FormLabel className='font-bold'>Unit</FormLabel>
+                                    <Select {...field} value={field.value} onValueChange={field.onChange}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="unit" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="rem">rem</SelectItem>
+                                            <SelectItem value="%">precent</SelectItem>
+                                            <SelectItem value="px">pixel</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>;
+                            }} />
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
         </form>
     </Form>
 }

@@ -66,11 +66,9 @@ function Designer() {
             sidebarOrElementOverPage(event, selectedPage, context);
         },
         onDragEnd: (event) => {
-            console.log('selected', selectedElement);
             const { active, over } = event as any;
             if (!active || !over || !context) return;
             active.data.current = (activeRef?.current as any)?.data?.current;
-            console.log('current', active.data.current);
             sidebarOverDesigner(event, selectedPage, context);
             elementOverDesigner(event, selectedPage, context);
             sidebarOverElement(event, selectedPage, context);
@@ -91,8 +89,8 @@ function Designer() {
                 <div ref={droppable.setNodeRef} className={cn("bg-background shadow-2xl max-w-[90%] h-full m-auto rounded-xl flex flex-col flex-grow item-center justify-start flex-1 overflow-y-auto",
                     droppable.isOver && "ring-4 ring-foreground",
                 )}>
-                    <div className='h-12 flex items-center justify-between px-4  w-full border-b' >
-                        <div className='bg-foreground text-background font-black flex justify-center items-center w-8 h-8 text-center rounded-full'>
+                    <div className='min-h-12 flex items-center justify-between px-4  w-full border-b' >
+                        <div className='bg-foreground text-background font-black text-base flex justify-center items-center min-w-6 min-h-6  text-center rounded-full'>
                             {selectedPage}
                         </div>
                         <div key={selectedElement?.id} className={cn(' w-max -top-5 hidden flex-row cursor-pointer ',
