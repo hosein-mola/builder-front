@@ -26,6 +26,7 @@ import { elementOverDesigner } from './actions/elementOverDesinger';
 
 function Designer() {
     const activeRef = useRef(null);
+
     const red = [
         'bg-violet-900',
         'bg-violet-800',
@@ -52,6 +53,9 @@ function Designer() {
         setElements,
         updateElement,
         setSelectedPage } = useDesigner();
+
+
+    console.log(elements);
 
     const droppable = useDroppable({
         id: 'designer-drop-area',
@@ -158,7 +162,6 @@ function Designer() {
 
 export function DesignerElementWrapper({ element, index, row }: { element: FormElementInstance, index: number, row: boolean }) {
     const { elements, selectedElement, selectedElementParents, updateSelectedParents, removeElement, setElements, setSelectedElement } = useDesigner();
-
     const topHalf = useDroppable({
         id: element.id + '-top',
         data: {

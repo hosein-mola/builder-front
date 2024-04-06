@@ -78,8 +78,8 @@ export default function DesignerContextProvider({
             element.parentId = parentId;
             element.page = page;
             newElement.splice(index, 0, element);
-            reIndexed(newElement);
-            return newElement;
+            const indexded = reIndexed(newElement);
+            return indexded;
         })
     }
     const updateSelectedParents = (element: FormElementInstance, level: number) => {

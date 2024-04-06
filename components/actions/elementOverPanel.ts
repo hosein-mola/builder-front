@@ -19,6 +19,7 @@ export function elementOverPanel(event: DragEndEvent, selectedPage: number, cont
     if (overType == "panel") {
         if (isDesignerBtnElement && !isDroppingOverDesignerElement) {
             const type = active?.data?.current?.type;
+
             const newElement = FormElements[type as ElementType].construct(ulid(10), 0, null, selectedPage);
             addElement(elements.length, newElement, over?.data?.current?.extraAttributes.id, selectedPage);
         }

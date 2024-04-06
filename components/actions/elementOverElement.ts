@@ -26,17 +26,6 @@ function calculateNewIndex(draggedIndex: number, droppedIndex: number, isAbove: 
 function reindexItems(items: any, dragIndex: number, dropIndex: number, isAbove: boolean, selectedPage: number): any {
     let cloneItems = [...items];
     const newDropItem = calculateNewIndex(dragIndex, dropIndex, isAbove);
-    function swapItems<T>(arr: T[], dragIndex: number, dropIndex: number): any {
-        // Check if the indices are valid
-        if (dragIndex < 0 || dragIndex >= arr.length || dropIndex < 0 || dropIndex >= arr.length) {
-            return;
-        }
-        // // Swap the items
-        // const temp = arr[dragIndex];
-        // arr[dragIndex] = arr[dropIndex];
-        // arr[dropIndex] = temp;
-        return arr;
-    }
     function moveItem<T>(arr: any, sourceIndex: number, destinationIndex: number, prevDropIndex: number): any {
         // Check if the indices are valid
         if (sourceIndex < 0 || sourceIndex >= arr.length || destinationIndex < 0 || destinationIndex >= arr.length) {

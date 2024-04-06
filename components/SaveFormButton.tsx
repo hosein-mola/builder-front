@@ -12,6 +12,8 @@ function SaveFormButton({ id }: { id: number }) {
 
     const updateFormContent = async () => {
         try {
+            console.log('pre send', elements);
+
             await UpdateFormContent(id, elements);
             toast({
                 title: "Success",

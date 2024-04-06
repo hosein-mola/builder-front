@@ -122,7 +122,7 @@ function DesignerComponent({ elementInstance }: { elementInstance: FormElementIn
                 padding: element.extraAttributes['padding'] + element.extraAttributes['paddingUnit']
             }}
         >
-            {elements.filter(el => el.parentId == element.id).map((element, index) => {
+            {elements.filter(el => el.parentId == element.id).sort((a: FormElementInstance, b: FormElementInstance) => a.index - b.index).map((element, index) => {
                 return <div
                     className={cn('h-full grow grid w-full ',
                         String(element.extraAttributes.span) == "1" && "col-span-1",
