@@ -1,6 +1,6 @@
 import React, { MouseEvent, useState } from 'react'
 import SidebarBtnElement from './SidebarBtnElement'
-import { FormElements } from './FormElement'
+import { FormElementInstance, FormElements } from './FormElement'
 import useDesigner from './hooks/useDesigner'
 import FormElementSidebar from './FormElementSidebar';
 import PropertiesFormSidebar from './PropertiesFormSidebar';
@@ -44,7 +44,7 @@ function DesignerPageList() {
                 >
                     <div
                         className='w-full h-full mt-4 flex flex-grow flex-col gap-2 overflow-x-hidden pointer'>
-                        {pages.map(id => <SortableItem key={id} id={id} active={active} draggedItem={draggedItem} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />)}
+                        {pages.sort((a: number, b: number) => a - b).map((id, index) => <SortableItem key={index} index={index} id={id} active={active} draggedItem={draggedItem} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />)}
                     </div>
                 </SortableContext>
                 {/* </DndContext> */}
@@ -106,7 +106,7 @@ function SortableItem(props: any) {
                     <div className={cn('w-11/12 flex items-center px-2 border cursor-pointer active:ring-2 ring-foreground h-32 rounded-xl',
                         props.selectedPage == props.id && "ring-2 ring-foreground"
                     )}></div>
-                    <span className='w-1/12 text-sm text-center text-muted-foreground/50 '>{props.id}</span>
+                    <span className='w-1/12 text-sm text-center text-muted-foreground/50 '>{props.index + 1}</span>
                 </div>
             </div>
         </div>

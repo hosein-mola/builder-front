@@ -1,8 +1,6 @@
 import React from 'react'
 import { TextFieldFormElement } from './fields/TextField';
 import { IconType } from 'react-icons/lib';
-import { TitleFieldFormElement } from './fields/TitleField';
-import { SubtitleFieldFormElement } from './fields/SubTitleField';
 import { PanelFieldElement } from './fields/PanelField';
 import { UseDraggableArguments, useDraggable } from '@dnd-kit/core';
 

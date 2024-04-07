@@ -188,10 +188,10 @@ function PropertiesComponent({
         <form onSubmit={(e) => {
             e.preventDefault();
         }} onChange={form.handleSubmit(applyChanges)} className='flex flex-col space-y-3 gap-2'>
-            <Accordion type="single" collapsible className=''>
+            <Accordion type="multiple" defaultValue={["item-1", "item-2"]} className=''>
                 <AccordionItem value="item-1">
                     <AccordionTrigger>Info</AccordionTrigger>
-                    <AccordionContent>
+                    <AccordionContent data-state={'open'}>
                         <FormField control={form.control} name={'title'} render={({ field }) => {
                             return <FormItem>
                                 <FormLabel>test</FormLabel>
@@ -203,7 +203,7 @@ function PropertiesComponent({
                                         }} />
                                 </FormControl>
                                 <FormDescription>
-                                    title of the field
+                                    id: {element.id}
                                 </FormDescription>
                                 <FormDescription>
                                 </FormDescription>
