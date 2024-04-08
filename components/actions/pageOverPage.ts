@@ -10,22 +10,23 @@ export function pageOverPage(event: DragEndEvent, selectedPage: number, context:
     const { setPages } = context;
 
     if (active?.id !== over?.id && over?.id !== undefined && active?.data?.current?.type == 'page') {
-        const oldIndex = pages.indexOf(Number(active.id));
-        const newIndex = pages.indexOf(Number(over.id));
         setPages((items: number[]) => {
+            const oldIndex = items.indexOf(Number(active.id));
+            const newIndex = items.indexOf(Number(over.id));
             return arrayMove(items, oldIndex, newIndex);
         });
-        const clone = JSON.parse(JSON.stringify(elements));
-        const data = clone.map((item: FormElementInstance) => {
-            if (item.page == oldIndex + 1) {
-                return { ...item, page: newIndex + 1 };
-            } else if (item.page == newIndex + 1) {
-                return { ...item, page: oldIndex + 1 };
+        const cloneElements = JSON.parse(JSON.stringify(elements));
+        const clonePages = JSON.parse(JSON.stringify(pages)).sort((a: number, b: number) => a - b);;
+
+        const updatedElements = cloneElements.map((element: any) => {
+            const pageIndex = clonePages.indexOf(element.page);
+            if (pageIndex !== -1) {
+                return { ...element, page: pageIndex + 1 };
             } else {
-                return item;
+                return element;
             }
         });
-        setElements(data);
-        setSelectedPage(newIndex + 1);
+        console.log("🚀 ~ updatedElements ~ updatedElements:", updatedElements)
+        // setElements(updatedElements);
     }
 }

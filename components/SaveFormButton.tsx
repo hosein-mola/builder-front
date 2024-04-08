@@ -7,14 +7,14 @@ import { toast } from './ui/use-toast';
 import { FaSpinner } from 'react-icons/fa';
 
 function SaveFormButton({ id }: { id: number }) {
-    const { elements } = useDesigner();
+    const { elements, pages } = useDesigner();
     const [loading, startTransition] = useTransition();
 
     const updateFormContent = async () => {
         try {
             console.log('pre send', elements);
 
-            await UpdateFormContent(id, elements);
+            await UpdateFormContent(id, elements, pages);
             toast({
                 title: "Success",
                 description: 'Your Form Has Been Saved!'

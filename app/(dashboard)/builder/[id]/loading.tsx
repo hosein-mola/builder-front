@@ -1,5 +1,7 @@
 import React from 'react'
 import { ImSpinner } from 'react-icons/im'
+import { Progress } from "@/components/ui/progress"
+
 
 function Loading() {
     return (

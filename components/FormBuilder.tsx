@@ -22,7 +22,7 @@ import { LiaElementor } from "react-icons/lia";
 import { VscBroadcast, VscCombine, VscDatabase, VscHistory, VscInsert, VscJson, VscLayers, VscLayout, VscListTree, VscOrganization, VscSettings, VscThreeBars, VscWorkspaceTrusted } from 'react-icons/vsc'
 
 function FormBuilder({ form }: { form: Form }) {
-    const { selectedElement, selectedElementParents, setElements, setSelectedElement, updateSelectedParents } = useDesigner();
+    const { selectedElement, selectedElementParents, setElements, setPages, setSelectedElement, updateSelectedParents } = useDesigner();
     const [isReady, setIsReady] = useState(false);
 
 
@@ -52,6 +52,7 @@ function FormBuilder({ form }: { form: Form }) {
     useEffect(() => {
         if (isReady) return;
         setElements(((form as any).components));
+        setPages(JSON.parse((form as any).page.extraAttributes));
         const readyTimeout = setTimeout(() => setIsReady(true), 500);
         () => {
             clearTimeout(readyTimeout);

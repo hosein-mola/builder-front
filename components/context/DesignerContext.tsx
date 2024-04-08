@@ -37,7 +37,7 @@ export default function DesignerContextProvider({
     children: ReactNode
 }) {
     const [elements, setElements] = useState<FormElementInstance[]>([]);
-    const [pages, setPages] = useState(Array.from(Array(100).keys()).map((item: number) => item + 1));
+    const [pages, setPages] = useState(Array.from(Array(20).keys()).map((item: number) => item + 1));
     const [active, setActive] = useState<Active | null>(null);
     const [selectedElement, setSelectedElement] = useState<FormElementInstance | null>(null);
     const [selectedElementParents, setSelectedElementParents] = useState<FormElementInstance[]>([]);

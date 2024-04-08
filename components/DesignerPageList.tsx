@@ -29,14 +29,23 @@ import { useSortable } from '@dnd-kit/sortable';
 import { DragHandleDots1Icon, PlusCircledIcon } from '@radix-ui/react-icons';
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from '@/lib/utils';
+import { BiPlus } from 'react-icons/bi';
 
 function DesignerPageList() {
-    const { pages, active, selectedPage, setSelectedPage, draggedItem } = useDesigner();
+    const { pages, active, selectedPage, setSelectedPage, setPages, draggedItem } = useDesigner();
 
     return (
         <aside className='w-[400px] max-w-[400px]  flex flex-col items-center gap-2 h-full flex-grow  border-l border-muted px-2 bg-background overflowx-y-auto '>
             <div dir='rtl' className='flex flex-col  h-full p-2 w-full flex-grow '>
-                <div className='text-sm h-8 items-center flex text-foreground/70  '>Pages</div>
+                <div className='flex flex-row justify-between items-center'>
+                    <div className='text-sm h-8 items-center flex text-foreground/70  '>Pages</div>
+                    <div className='w-full h-5 flex items-center  justify-end'>
+                        <BiPlus className='w-6 h-6 text-foreground/70 cursor-pointer' onClick={() => {
+                            setPages((prev) => [...prev, prev[prev.length - 1] + 1]);
+                            setSelectedPage(pages[pages.length - 1] + 1)
+                        }} />
+                    </div>
+                </div>
                 <Separator className='mt-2' />
                 <SortableContext
                     items={pages}
@@ -44,10 +53,11 @@ function DesignerPageList() {
                 >
                     <div
                         className='w-full h-full mt-4 flex flex-grow flex-col gap-2 overflow-x-hidden pointer'>
-                        {pages.sort((a: number, b: number) => a - b).map((id, index) => <SortableItem key={index} index={index} id={id} active={active} draggedItem={draggedItem} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />)}
+                        {pages.map((id, index) => <SortableItem key={id} id={id} active={active} draggedItem={draggedItem} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />)}
                     </div>
                 </SortableContext>
                 {/* </DndContext> */}
+
             </div >
         </aside>
     )
@@ -106,7 +116,7 @@ function SortableItem(props: any) {
                     <div className={cn('w-11/12 flex items-center px-2 border cursor-pointer active:ring-2 ring-foreground h-32 rounded-xl',
                         props.selectedPage == props.id && "ring-2 ring-foreground"
                     )}></div>
-                    <span className='w-1/12 text-sm text-center text-muted-foreground/50 '>{props.index + 1}</span>
+                    <span className='w-1/12 text-sm text-center text-muted-foreground/50 '>{props.id}</span>
                 </div>
             </div>
         </div>

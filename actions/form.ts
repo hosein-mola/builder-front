@@ -49,10 +49,9 @@ export async function GetFormById(id: number) {
 
 }
 
-export async function UpdateFormContent(id: number, componenets: FormElementInstance[]) {
-    console.log('send ', componenets);
+export async function UpdateFormContent(id: number, componenets: FormElementInstance[], page: number[]) {
 
-    const response = await api.v1.put(`/forms/${String(id)}`, componenets, { method: 'PUT' });
+    const response = await api.v1.put(`/forms/${String(id)}`, { componenets, page }, { method: 'PUT' });
 }
 
 export async function PublishForm(formId: number) {
