@@ -11,6 +11,7 @@ function FormElementSidebar() {
             <div dir='rtl' className='mt-2 grid grid-cols-1 md:grid-cols-2 gap-2  place-items-center'>
                 <SidebarBtnElement formElement={FormElements.text} />
                 <SidebarBtnElement formElement={FormElements.panel} />
+                <SidebarBtnElement formElement={FormElements.flex} />
             </div>
         </div >
     )

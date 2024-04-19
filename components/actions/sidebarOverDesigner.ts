@@ -16,7 +16,7 @@ export function sidebarOverDesigner(event: DragEndEvent, selectedPage: number | 
     if (droppingSidebarButtonOverDesignerArea) {
         const type = active?.data?.current?.type;
         if (elements && selectedPage) {
-            const newElement = FormElements[type as ElementType].construct(ulid(10), 0, null, selectedPage);
+            const newElement = FormElements[type as ElementType].construct(ulid(10), 0, null, selectedPage, {});
             addElement(elements.length, newElement, null, selectedPage);
         }
     }

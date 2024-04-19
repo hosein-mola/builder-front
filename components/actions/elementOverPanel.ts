@@ -16,11 +16,11 @@ export function elementOverPanel(event: DragEndEvent, selectedPage: number, cont
     const isDroppingOverDesignerElement = isDroppingOverDesignerElementTopHalf || isDroppingOverDesignerElementBottomHalf;
     const activeElementIndex = elements.findIndex(el => el.id == activeId);
     const overElementIndex = elements.findIndex(el => el.id == overId);
-    if (overType == "panel") {
+    if (overType == "panel" || overType == 'flex') {
         if (isDesignerBtnElement && !isDroppingOverDesignerElement) {
             const type = active?.data?.current?.type;
 
-            const newElement = FormElements[type as ElementType].construct(ulid(10), 0, null, selectedPage);
+            const newElement = FormElements[type as ElementType].construct(ulid(10), 0, null, selectedPage, {});
             addElement(elements.length, newElement, over?.data?.current?.extraAttributes.id, selectedPage);
         }
         if (!isDroppingOverDesignerElement) {

@@ -1,12 +1,16 @@
 import React from 'react'
 import { ImSpinner } from 'react-icons/im'
 import { Progress } from "@/components/ui/progress"
+import Logo from '@/components/Logo'
 
 
 function Loading() {
     return (
-        <div className='flex items-center justify-center w-full h-full'>
-            <ImSpinner className='animate-spin h-12 w-12' />
+        <div className='flex flex-col items-center justify-center w-full h-full'>
+            <div className='w-2/12 flex flex-col justify-center items-center gap-5'>
+                <Logo noText className="w-32 h-32" />
+                <Progress value={100} className='h-3' />
+            </div>
         </div>
     )
 }

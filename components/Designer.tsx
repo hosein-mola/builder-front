@@ -55,8 +55,6 @@ function Designer() {
         setSelectedPage } = useDesigner();
 
 
-    console.log(elements);
-
     const droppable = useDroppable({
         id: 'designer-drop-area',
         data: {
@@ -82,7 +80,7 @@ function Designer() {
             activeRef.current = null;
         },
         onDragStart: (event: DragStartEvent) => {
-            activeRef.current = event.active as any;
+            activeRef.current = event?.active as any;
         }
     })
 
@@ -195,6 +193,8 @@ export function DesignerElementWrapper({ element, index, row }: { element: FormE
     });
 
     if (draggble.isDragging) return null;
+
+
     const DesignerElement = FormElements[element.type].designerComponent;
     return <div
         dir='rtl'
@@ -239,9 +239,7 @@ export function DesignerElementWrapper({ element, index, row }: { element: FormE
             )} >
             </div>}
             {topHalf.isOver && <div className='ring-4 ring-foreground z-[100]'></div>}
-            <div className={cn('w-full ')} >
-                <DesignerElement elementInstance={element} />
-            </div>
+            <DesignerElement elementInstance={element} />
             {bottomHalf.isOver && <div className='ring-4 ring-foreground z-[100]'></div>}
             {draggble.active && <div ref={bottomHalf.setNodeRef} className={cn(" absolute z-[10] left-0 h-full flex-grow  min-w-[2rem] max-w-[2rem] opacity-100 ",
                 !row && "h-1/4 min-w-full left-0 right-0 bottom-0 z-[99]  ",

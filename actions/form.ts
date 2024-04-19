@@ -50,7 +50,6 @@ export async function GetFormById(id: number) {
 }
 
 export async function UpdateFormContent(id: number, componenets: FormElementInstance[], page: number[]) {
-
     const response = await api.v1.put(`/forms/${String(id)}`, { componenets, page }, { method: 'PUT' });
 }
 

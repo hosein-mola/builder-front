@@ -1,7 +1,8 @@
 "use client"
-import { Dispatch, ReactNode, SetStateAction, createContext, useState } from "react";
-import { FormElementInstance, FormElements } from "../FormElement";
 import { Active } from "@dnd-kit/core";
+import { Dispatch, ReactNode, SetStateAction, createContext, useEffect, useState } from "react";
+import { ulid } from "ulid";
+import { FormElementInstance, FormElements } from "../FormElement";
 import { reIndexed } from "../actions/elementOverElement";
 
 export type DesignerContextType = {
@@ -26,6 +27,9 @@ export type DesignerContextType = {
     updateSelectedParents: (element: FormElementInstance, level: number) => void,
     setDraggedItem: Dispatch<SetStateAction<Active | null>>,
     setPages: Dispatch<SetStateAction<number[]>>,
+    duplicatePage: (page: number, index: number) => void;
+    newPage: (page: number, index: number) => void;
+    deletePage: (page: number, index: number) => void;
 }
 
 export type ContextType = DesignerContextType;
@@ -44,6 +48,9 @@ export default function DesignerContextProvider({
     const [selectedPage, setSelectedPage] = useState<number>(1);
     const [draggedItem, setDraggedItem] = useState<Active | null>(null);
 
+    useEffect(() => {
+        console.log("🚀 ~ elements:", elements)
+    }, [elements])
 
     const swapElement = (fromIndex: number, toIndex: number) => {
         setElements(prev => {
@@ -118,6 +125,47 @@ export default function DesignerContextProvider({
         return parents;
     }
 
+    function duplicateItems(originalArray: FormElementInstance[], targetPage: number, newPage: number): FormElementInstance[] {
+        const duplicateMap: Record<string, string> = {};
+        let duplicatedArray: FormElementInstance[] = [];
+        [...originalArray].filter((item: FormElementInstance) => item.page == targetPage).map((item: FormElementInstance) => {
+            const duplicatedItem = FormElements[item.type].construct(ulid(10), item.index, item.parentId, newPage, item.extraAttributes);
+            duplicatedArray.push(duplicatedItem);
+            duplicateMap[item.id] = duplicatedItem.id;
+        });
+        duplicatedArray.forEach((item: any) => {
+            item.parentId = duplicateMap[item.parentId];
+        });
+        return duplicatedArray;
+    }
+
+    function duplicatePage(page: number, index: number) {
+        const cloneELements = [...elements];
+        const clonePages = [...pages];
+        const newPage = clonePages.length + 1;
+        const getAllItemsInPage: FormElementInstance[] = duplicateItems(cloneELements, page, newPage)
+        clonePages.splice(index + 1, 0, newPage);
+        if (!getAllItemsInPage) { return }
+        setPages([...clonePages]);
+        setElements((prev: FormElementInstance[]) => [...prev, ...getAllItemsInPage]);
+    }
+
+    function newPage(page: number, index: number) {
+        const clonePages: number[] = [...pages];
+        const newPage = pages.length + 1;
+        clonePages.splice(index + 1, 0, newPage);
+        setPages([...clonePages]);
+    }
+
+    function deletePage(page: number, index: number) {
+        const clonePages = [...pages];
+        clonePages.splice(index, 1);
+        console.log("🚀 ~ deletePage ~ clonePages:", clonePages)
+        setElements((prev: FormElementInstance[]) => prev.filter((item: FormElementInstance) => item.page != page));
+        setPages([...clonePages]);
+        setSelectedPage(index + 1);
+    }
+
     const context = {
         elements,
         pages,
@@ -127,6 +175,9 @@ export default function DesignerContextProvider({
         selectedPage,
         draggedItem,
         setPages,
+        duplicatePage,
+        newPage,
+        deletePage,
         setActive,
         addElement,
         updateSelectedParents,

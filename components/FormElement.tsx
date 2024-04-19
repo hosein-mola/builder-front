@@ -3,12 +3,13 @@ import { TextFieldFormElement } from './fields/TextField';
 import { IconType } from 'react-icons/lib';
 import { PanelFieldElement } from './fields/PanelField';
 import { UseDraggableArguments, useDraggable } from '@dnd-kit/core';
+import { FlexFieldElement } from './fields/FlexField';
 
-export type ElementType = "panel" | "text";
+export type ElementType = "panel" | "flex" | "text";
 
 export type SubmitFunction = (key: string, value: string) => void;
 export type FormElement = {
-    construct: (id: string, index: number, parentId: string | null, page: number) => FormElementInstance;
+    construct: (id: string, index: number, parentId: string | null, page: number, _extraAttributes: Record<string, any>) => FormElementInstance;
     type: ElementType;
     designerBtnElement: {
         icon: IconType;
@@ -43,5 +44,6 @@ type FormElementsType = {
 }
 export const FormElements: FormElementsType = {
     text: TextFieldFormElement,
-    panel: PanelFieldElement
+    panel: PanelFieldElement,
+    flex: FlexFieldElement
 };

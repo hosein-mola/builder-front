@@ -30,10 +30,9 @@ function DragOverlayWrapper() {
             <div
                 className={cn('flex flex-row gap-2 bg-background p-1 w-full')}
             >
-                <div className={cn('w-11/12 flex items-center px-2 border cursor-pointer active:ring-2 ring-foreground h-32 rounded-xl',
+                <div className={cn('w-full flex  items-center px-2 border cursor-pointer active:ring-2 ring-foreground h-32 rounded-xl',
                     "ring-2 ring-foreground"
-                )}></div>
-                <span className='w-1/12 text-sm text-center text-muted-foreground/50 '>{draggedItem.id}</span>
+                )}>{ }</div>
             </div>
         </div>
     }
@@ -41,7 +40,7 @@ function DragOverlayWrapper() {
     if (isSidebarBtnElemnt) {
         const type = draggedItem.data?.current?.type as ElementType;
         node = <div className='w-full flex flex-grow  bg-accent border rounded-md min-h-[120px] min-w-[120px] scale-[0.5]    !pointer-events-none  '>
-            <SidebarBtnElement formElement={FormElements[type]} />
+            <SidebarBtnElement formElement={FormElements?.[type]} />
         </div>
     }
 
@@ -52,7 +51,7 @@ function DragOverlayWrapper() {
         if (element == null) {
             node = <div>element not found</div>
         } else {
-            const DesignerElementComponent = FormElements[element.type];
+            const DesignerElementComponent = FormElements?.[element?.type];
             node = <div className='w-full flex flex-grow  bg-accent border rounded-md min-h-[120px] min-w-[120px] scale-[0.5]    !pointer-events-none  '>
                 <SidebarBtnElement formElement={DesignerElementComponent} />
             </div>

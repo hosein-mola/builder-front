@@ -20,6 +20,8 @@ import { LuLocateFixed, LuUserCircle } from 'react-icons/lu'
 import { GoGrabber } from 'react-icons/go'
 import { LiaElementor } from "react-icons/lia";
 import { VscBroadcast, VscCombine, VscDatabase, VscHistory, VscInsert, VscJson, VscLayers, VscLayout, VscListTree, VscOrganization, VscSettings, VscThreeBars, VscWorkspaceTrusted } from 'react-icons/vsc'
+import { Progress } from './ui/progress'
+import Logo from './Logo'
 
 function FormBuilder({ form }: { form: Form }) {
     const { selectedElement, selectedElementParents, setElements, setPages, setSelectedElement, updateSelectedParents } = useDesigner();
@@ -29,16 +31,18 @@ function FormBuilder({ form }: { form: Form }) {
     const pointerSensor = useSensor(PointerSensor, {
         activationConstraint: {
             distance: 0,
-            delay: 500,
+            delay: 10,
+            tolerance: 0
         },
     });
 
-    // const mouseSensor = useSensor(MouseSensor, {
-    //     activationConstraint: {
-    //         distance: 0,
-    //         delay: 250,
-    //     }
-    // });
+    const mouseSensor = useSensor(MouseSensor, {
+        activationConstraint: {
+            distance: 0,
+            delay: 10,
+            tolerance: 0
+        }
+    });
 
     // const touchSensor = useSensor(TouchSensor, {
     //     activationConstraint: {
@@ -47,23 +51,25 @@ function FormBuilder({ form }: { form: Form }) {
     //     }
     // });
 
-    const sensors = useSensors(pointerSensor);
+    const sensors = useSensors(pointerSensor, mouseSensor);
 
     useEffect(() => {
         if (isReady) return;
         setElements(((form as any).components));
+        console.log("🚀 ~ useEffect ~ form:", form)
         setPages(JSON.parse((form as any).page.extraAttributes));
-        const readyTimeout = setTimeout(() => setIsReady(true), 500);
-        () => {
-            clearTimeout(readyTimeout);
-        }
+        setIsReady(true);
     }, [form, setElements])
 
     if (!isReady) {
         return <div className='flex flex-col items-center justify-center w-full h-full'>
-            <FaSpinner className='animate-spin w-12 h-12' />
+            <div className='w-2/12 flex flex-col justify-center items-center gap-5'>
+                <Logo noText className="w-32 h-32" />
+                <Progress value={50} className='h-3' />
+            </div>
         </div>
     }
+
     const shareUrl = `${window.location.origin}/submit/${form.sharedURL}`;
 
     if (form.published) {

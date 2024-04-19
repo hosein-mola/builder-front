@@ -19,20 +19,48 @@ import {
     useDroppable,
     useDndMonitor,
 } from '@dnd-kit/core';
+import { IoDuplicateOutline, IoEyeOffOutline, IoTrailSign, IoTrashBin, IoTrashBinOutline } from "react-icons/io5";
+import { MdDisabledVisible } from "react-icons/md";
+
 import {
     arrayMove,
     SortableContext,
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
+
 import { useSortable } from '@dnd-kit/sortable';
 import { DragHandleDots1Icon, PlusCircledIcon } from '@radix-ui/react-icons';
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from '@/lib/utils';
 import { BiPlus } from 'react-icons/bi';
 
+import {
+    ContextMenu,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuTrigger,
+} from "@/components/ui/context-menu"
+
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 function DesignerPageList() {
-    const { pages, active, selectedPage, setSelectedPage, setPages, draggedItem } = useDesigner();
+    const { pages, active, selectedPage, draggedItem, setSelectedPage, setPages, newPage, duplicatePage, deletePage } = useDesigner();
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
+    const [deleteData, setDeleteData] = useState({
+        id: -1,
+        index: -1,
+    });
 
     return (
         <aside className='w-[400px] max-w-[400px]  flex flex-col items-center gap-2 h-full flex-grow  border-l border-muted px-2 bg-background overflowx-y-auto '>
@@ -41,8 +69,8 @@ function DesignerPageList() {
                     <div className='text-sm h-8 items-center flex text-foreground/70  '>Pages</div>
                     <div className='w-full h-5 flex items-center  justify-end'>
                         <BiPlus className='w-6 h-6 text-foreground/70 cursor-pointer' onClick={() => {
-                            setPages((prev) => [...prev, prev[prev.length - 1] + 1]);
-                            setSelectedPage(pages[pages.length - 1] + 1)
+                            setPages((prev) => [...prev, pages.length + 1]);
+                            setSelectedPage(pages.length + 1)
                         }} />
                     </div>
                 </div>
@@ -52,13 +80,56 @@ function DesignerPageList() {
                     strategy={verticalListSortingStrategy}
                 >
                     <div
-                        className='w-full h-full mt-4 flex flex-grow flex-col gap-2 overflow-x-hidden pointer'>
-                        {pages.map((id, index) => <SortableItem key={id} id={id} active={active} draggedItem={draggedItem} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />)}
+                        className='w-full h-full mt-4 flex flex-grow flex-col gap-2 overflow-x-hidden pointer'
+                    >
+                        {pages.map((id, index) => {
+                            return <ContextMenu>
+                                <ContextMenuTrigger>
+                                    <SortableItem key={id} id={id} index={index} active={active} draggedItem={draggedItem} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
+                                </ContextMenuTrigger>
+                                <ContextMenuContent className='divide-y'>
+                                    <ContextMenuItem onClick={() => newPage(id, index)} className='flex flex-row gap-1 items-center justify-between w-full py-2 cursor-pointer'>
+                                        <IoDuplicateOutline className='w-5 h-5' />
+                                        <span className='font-light'>New Page</span>
+                                    </ContextMenuItem>
+                                    <ContextMenuItem onClick={() => duplicatePage(id, index)} className='flex flex-row gap-1 items-center justify-between w-full py-2 cursor-pointer'>
+                                        <IoDuplicateOutline className='w-5 h-5' />
+                                        <span className='font-light'>Duplicate</span>
+                                    </ContextMenuItem>
+                                    <ContextMenuItem onClick={() => {
+                                        setDeleteData({ id, index });
+                                        setDeleteConfirm(true);
+                                    }} className='flex flex-row gap-1 items-center justify-between w-full py-2 cursor-pointer'>
+                                        <IoTrashBinOutline className='w-5 h-5' />
+                                        <span className='font-light'>Delete</span>
+                                    </ContextMenuItem>
+                                </ContextMenuContent>
+                            </ContextMenu>
+                        })}
                     </div>
                 </SortableContext>
                 {/* </DndContext> */}
 
             </div >
+            <AlertDialog open={deleteConfirm}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete your account
+                            and remove your data from our servers.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => {
+                            deletePage(deleteData.id, deleteData.index);
+                            setDeleteConfirm(false);
+                            setDeleteData({ id: -1, index: -1 })
+                        }}>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </aside>
     )
 }
@@ -68,6 +139,7 @@ export default DesignerPageList
 
 
 function SortableItem(props: any) {
+    const { setSelectedPage } = useDesigner();
     const {
         attributes,
         listeners,
@@ -103,7 +175,7 @@ function SortableItem(props: any) {
     const isPage = type == "page";
 
     return (
-        <div ref={setNodeRef} {...attributes} {...listeners} style={{ ...style, zIndex: props?.active?.id == props.id ? 9999999 : 9 }} className='w-full flex flex-row gap-2'>
+        <div ref={setNodeRef} {...attributes} {...listeners} style={{ ...style, zIndex: props?.active?.id == props.id ? 9999999 : 9 }} className='w-full flex flex-row gap-2' onContextMenu={() => setSelectedPage(props.id)}>
             <div className={cn('flex relative flex-row gap-2 bg-background p-1 min-w-full h-auto ',
                 props.draggedItem?.id == props.id && "opacity-0"
             )} >
@@ -113,10 +185,9 @@ function SortableItem(props: any) {
                 >
                     {!isPage && type !== undefined && <div ref={droppble.setNodeRef} className={cn('w-full bg-red- absolute flex items-center     h-32 rounded-xl',
                     )}></div>}
-                    <div className={cn('w-11/12 flex items-center px-2 border cursor-pointer active:ring-2 ring-foreground h-32 rounded-xl',
+                    <div className={cn('w-full flex items-center select-none justify-center text-2xl text-foreground/20 px-2 border cursor-pointer active:ring-2 ring-foreground h-32 rounded-xl',
                         props.selectedPage == props.id && "ring-2 ring-foreground"
-                    )}></div>
-                    <span className='w-1/12 text-sm text-center text-muted-foreground/50 '>{props.id}</span>
+                    )}>{props.id}</div>
                 </div>
             </div>
         </div>

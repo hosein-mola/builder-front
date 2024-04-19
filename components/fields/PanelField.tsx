@@ -56,15 +56,17 @@ const propertiesSchema = z.record(z.string(), z.string().optional());
 
 export const PanelFieldElement: FormElement = {
     type,
-    construct: (id: string, index: number, parentId: string | null, page: number) => {
-        extraAttributes.id = id;
+    construct: (id: string, index: number, parentId: string | null, page: number, _extraAttributes?: Record<string, any>) => {
         return ({
             id,
             index,
             type,
             parentId,
             page,
-            extraAttributes
+            extraAttributes: {
+                ...extraAttributes,
+                ..._extraAttributes,
+            }
         })
     },
     designerBtnElement: {
@@ -175,7 +177,7 @@ function PropertiesComponent({
     });
 
     useEffect(() => {
-        form.reset(element.extraAttributes);
+        // form.reset(element.extraAttributes);
     }, [element, form])
 
     function applyChanges(values: any) {

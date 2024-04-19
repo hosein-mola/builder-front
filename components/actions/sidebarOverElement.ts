@@ -27,7 +27,7 @@ export function sidebarOverElement(event: DragEndEvent, selectedPage: number, co
         if (isDroppingOverDesignerElementBottomHalf) {
             indexForNewElement = overElementIndex + 1;
         }
-        const newElement = FormElements[type as ElementType].construct(ulid(10), indexForNewElement, null, selectedPage);
+        const newElement = FormElements[type as ElementType].construct(ulid(10), indexForNewElement, null, selectedPage, {});
         addElement(indexForNewElement, newElement, elements[overElementIndex].parentId, selectedPage);
     }
 }
