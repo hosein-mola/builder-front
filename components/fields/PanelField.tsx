@@ -5,7 +5,7 @@ import { MdTextFields } from 'react-icons/md';
 import { Label } from '@radix-ui/react-label';
 import { Input } from '../ui/input';
 import { boolean, z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { VscLayoutSidebarRightOff } from "react-icons/vsc";
 
@@ -177,8 +177,15 @@ function PropertiesComponent({
     });
 
     useEffect(() => {
-        // form.reset(element.extraAttributes);
-    }, [element, form])
+        form.reset(element.extraAttributes);
+    }, [element, form, element.extraAttributes])
+
+    const formData = useWatch({ control: form.control });
+
+    React.useEffect(() => {
+        formData.id = element.id;
+        applyChanges(formData);
+    }, [formData]);
 
     function applyChanges(values: any) {
         updateElement(element.id, {
@@ -186,6 +193,7 @@ function PropertiesComponent({
             extraAttributes: { ...values }
         });
     }
+
     return <Form {...form}>
         <form onSubmit={(e) => {
             e.preventDefault();

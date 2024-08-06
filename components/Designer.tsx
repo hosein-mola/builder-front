@@ -26,7 +26,6 @@ import { elementOverDesigner } from './actions/elementOverDesinger';
 
 function Designer() {
     const activeRef = useRef(null);
-
     const red = [
         'bg-violet-900',
         'bg-violet-800',
@@ -37,6 +36,7 @@ function Designer() {
         'bg-violet-300',
         'bg-violet-200',
     ];
+
     const {
         context,
         elements,
@@ -62,6 +62,12 @@ function Designer() {
             isDesignerDropArea: true
         }
     });
+
+    useEffect(() => {
+        setSelectedPage(1);
+
+    }, [])
+
     useDndMonitor({
         onDragOver: (event) => {
             if (!context) return;
@@ -85,7 +91,7 @@ function Designer() {
     })
 
     return (
-        <div className='w-full h-full flex flex-grow '>
+        <div className='w-full h-full flex-grow flex'>
             <DesignerPageList />
             <div className="pt-4 pb-8 w-full " onClick={() => selectedElement && setSelectedElement(null)}>
                 <div ref={droppable.setNodeRef} className={cn("bg-background shadow-2xl max-w-[90%] h-full m-auto rounded-xl flex flex-col flex-grow item-center justify-start flex-1 overflow-y-auto",
@@ -235,14 +241,14 @@ export function DesignerElementWrapper({ element, index, row }: { element: FormE
                 selectedElement?.id == element.id && element?.type == "panel" && "border-violet-600"
             )}>
             {draggble.active && <div ref={topHalf.setNodeRef} className={cn("absolute z-[10] right-0 h-full flex-grow  min-w-[2rem] max-w-[2rem] opacity-100",
-                !row && "h-1/4 min-w-full left-0 right-0 top-0 z-[99]  ",
+                !row && "h-[10px] bg-blue-100 min-w-full left-0 right-0 top-0 z-[99]  ",
             )} >
             </div>}
             {topHalf.isOver && <div className='ring-4 ring-foreground z-[100]'></div>}
             <DesignerElement elementInstance={element} />
             {bottomHalf.isOver && <div className='ring-4 ring-foreground z-[100]'></div>}
             {draggble.active && <div ref={bottomHalf.setNodeRef} className={cn(" absolute z-[10] left-0 h-full flex-grow  min-w-[2rem] max-w-[2rem] opacity-100 ",
-                !row && "h-1/4 min-w-full left-0 right-0 bottom-0 z-[99]  ",
+                !row && "h-[10px] bg-blue-100 min-w-full left-0 right-0 bottom-0 z-[99]  ",
             )}></div>}
         </div>
     </div >;
