@@ -241,14 +241,14 @@ export function DesignerElementWrapper({ element, index, row }: { element: FormE
                 selectedElement?.id == element.id && element?.type == "panel" && "border-violet-600"
             )}>
             {draggble.active && <div ref={topHalf.setNodeRef} className={cn("absolute z-[10] right-0 h-full flex-grow  min-w-[2rem] max-w-[2rem] opacity-100",
-                !row && "h-[10px] bg-blue-100 min-w-full left-0 right-0 top-0 z-[99]  ",
+                !row && "h-[10px]  min-w-full left-0 right-0 top-0 z-[99]  ",
             )} >
             </div>}
-            {topHalf.isOver && <div className='ring-4 ring-foreground z-[100]'></div>}
+            {topHalf.isOver && <div className='ring-4 ring-foreground/70 z-[100]'></div>}
             <DesignerElement elementInstance={element} />
-            {bottomHalf.isOver && <div className='ring-4 ring-foreground z-[100]'></div>}
+            {bottomHalf.isOver && <div className='ring-4 ring-foreground/70 z-[100]'></div>}
             {draggble.active && <div ref={bottomHalf.setNodeRef} className={cn(" absolute z-[10] left-0 h-full flex-grow  min-w-[2rem] max-w-[2rem] opacity-100 ",
-                !row && "h-[10px] bg-blue-100 min-w-full left-0 right-0 bottom-0 z-[99]  ",
+                !row && "h-[10px]  min-w-full left-0 right-0 bottom-0 z-[99]  ",
             )}></div>}
         </div>
     </div >;

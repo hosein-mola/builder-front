@@ -25,26 +25,25 @@ import Logo from './Logo'
 import { GetFormById } from '@/actions/form'
 import { useRouter } from 'next/router'
 import { useParams } from 'next/navigation'
+import { useTheme } from 'next-themes'
+import { twMerge } from 'tailwind-merge'
 
 function FormBuilder(props: any) {
     const { selectedElement, selectedElementParents, setElements, setPages, setSelectedElement, updateSelectedParents } = useDesigner();
     const [isReady, setIsReady] = useState(false);
     const params = useParams();
     const [form, setForm] = useState(props.form);
+    const { theme, setTheme } = useTheme()
 
     const pointerSensor = useSensor(PointerSensor, {
         activationConstraint: {
-            distance: 0,
-            delay: 30,
-            tolerance: 0
+            distance: 5,
         },
     });
 
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: {
-            distance: 0,
-            delay: 30,
-            tolerance: 0
+            distance: 5,
         }
     });
 
@@ -151,7 +150,7 @@ function FormBuilder(props: any) {
                         <span> {form.name}</span>
                     </h2>
                 </nav>
-                <div className="flex w-full flex-grow items-center justify-center relative overflow-y-hidden h-[200px] bg-accent bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)]">
+                <div className={twMerge(`flex w-full flex-grow items-center justify-center relative overflow-y-hidden h-[200px]  bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)] nord:bg-red-500`, theme == 'nord' && 'bg-[url(/paper-dark.svg)]')}>
                     <div className='w-12 h-full flex flex-grow bg-background justify-between flex-col items-center gap-10 p-4 border-r'>
                         <div className='flex flex-col gap-10'>
                             <VscInsert className='w-6 h-6 cursor-pointer' />

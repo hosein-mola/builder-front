@@ -53,7 +53,7 @@ const extraAttributes = {
     alignItems: 'stretch',
     alignContent: 'stretch',
     state: [],
-    border: '0.05rem solid #d0d0d0',
+    border: '0.05rem solid hsl(var(--border)',
     padding: '0.5',
     paddingUnit: 'rem',
     gap: '0'
