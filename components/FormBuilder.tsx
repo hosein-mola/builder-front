@@ -22,25 +22,28 @@ import { LiaElementor } from "react-icons/lia";
 import { VscBroadcast, VscCombine, VscDatabase, VscHistory, VscInsert, VscJson, VscLayers, VscLayout, VscListTree, VscOrganization, VscSettings, VscThreeBars, VscWorkspaceTrusted } from 'react-icons/vsc'
 import { Progress } from './ui/progress'
 import Logo from './Logo'
+import { GetFormById } from '@/actions/form'
+import { useRouter } from 'next/router'
+import { useParams } from 'next/navigation'
+import { useTheme } from 'next-themes'
+import { twMerge } from 'tailwind-merge'
 
-function FormBuilder({ form }: { form: Form }) {
+function FormBuilder(props: any) {
     const { selectedElement, selectedElementParents, setElements, setPages, setSelectedElement, updateSelectedParents } = useDesigner();
     const [isReady, setIsReady] = useState(false);
-
+    const params = useParams();
+    const [form, setForm] = useState(props.form);
+    const { theme, setTheme } = useTheme()
 
     const pointerSensor = useSensor(PointerSensor, {
         activationConstraint: {
-            distance: 0,
-            delay: 250,
-            tolerance: 10
+            distance: 5,
         },
     });
 
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: {
-            distance: 0,
-            delay: 250,
-            tolerance: 10
+            distance: 5,
         }
     });
 
@@ -54,11 +57,19 @@ function FormBuilder({ form }: { form: Form }) {
     const sensors = useSensors(pointerSensor, mouseSensor);
 
     useEffect(() => {
+        const req = async () => {
+            const _form = await GetFormById(Number(params.id));
+            setForm(_form);
+            setElements(((_form as any).components));
+            console.log("🚀 ~ useEffect ~ _form:", _form)
+            setPages(JSON.parse((_form as any).page.extraAttributes));
+            setIsReady(true);
+        }
+        req();
+    }, [])
+    useEffect(() => {
         if (isReady) return;
-        setElements(((form as any).components));
-        console.log("🚀 ~ useEffect ~ form:", form)
-        setPages(JSON.parse((form as any).page.extraAttributes));
-        setIsReady(true);
+
     }, [form, setElements])
 
     if (!isReady) {
@@ -139,7 +150,7 @@ function FormBuilder({ form }: { form: Form }) {
                         <span> {form.name}</span>
                     </h2>
                 </nav>
-                <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-[200px] bg-accent bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)]">
+                <div className={twMerge(`flex w-full flex-grow items-center justify-center relative overflow-y-hidden h-[200px]  bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)] nord:bg-red-500`, theme == 'nord' && 'bg-[url(/paper-dark.svg)]')}>
                     <div className='w-12 h-full flex flex-grow bg-background justify-between flex-col items-center gap-10 p-4 border-r'>
                         <div className='flex flex-col gap-10'>
                             <VscInsert className='w-6 h-6 cursor-pointer' />

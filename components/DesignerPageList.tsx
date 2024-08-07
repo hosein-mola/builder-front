@@ -186,7 +186,7 @@ function SortableItem(props: any) {
                     {!isPage && type !== undefined && <div ref={droppble.setNodeRef} className={cn('w-full bg-red- absolute flex items-center     h-32 rounded-xl',
                     )}></div>}
                     <div className={cn('w-full flex items-center select-none justify-center text-2xl text-foreground/20 px-2 border cursor-pointer active:ring-2 ring-foreground h-32 rounded-xl',
-                        props.selectedPage == props.id && "ring-2 ring-foreground"
+                        props.selectedPage == props.id && "ring ring-foreground/70"
                     )}>{props.id}</div>
                 </div>
             </div>
