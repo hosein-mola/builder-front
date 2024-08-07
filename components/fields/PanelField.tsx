@@ -158,9 +158,58 @@ function FormComponent({
     submitValue?: SubmitFunction,
     defaultValue?: string
 }) {
+    const { addElement, selectedElement, setSelectedElement, elements } = useDesigner();
+
     const element = elementInstance as CustomInstance;
-    const { title } = element.extraAttributes;
-    return <p className='text-xl'>{title}</p>
+    return <div
+        dir='rtl'
+        className={cn('flex flex-col bg-background h-full flex-grow w-full cursor-default',
+        )}
+    >
+        <div className={cn(' grid grid-cols-2  border p-5 gap-y-1 gap-x-1 grow  min-h-[5rem] h-full ',
+            String(element.extraAttributes.cols) == "1" && "grid-cols-1",
+            String(element.extraAttributes.cols) == "2" && "grid-cols-2",
+            String(element.extraAttributes.cols) == "3" && "grid-cols-3",
+            String(element.extraAttributes.cols) == "4" && "grid-cols-4",
+            String(element.extraAttributes.cols) == "5" && "grid-cols-5",
+            String(element.extraAttributes.cols) == "6" && "grid-cols-6",
+            String(element.extraAttributes.cols) == "7" && "grid-cols-7",
+            String(element.extraAttributes.cols) == "8" && "grid-cols-8",
+            String(element.extraAttributes.cols) == "9" && "grid-cols-9",
+            String(element.extraAttributes.cols) == "10" && "grid-cols-10",
+            String(element.extraAttributes.cols) == "11" && "grid-cols-11",
+            String(element.extraAttributes.cols) == "12" && "grid-cols-12",
+        )}
+            style={{
+                ...element.extraAttributes,
+                gap: element.extraAttributes['gap'] + 'rem',
+                padding: element.extraAttributes['padding'] + element.extraAttributes['paddingUnit']
+            }}
+        >
+            {elements.filter(el => el.parentId == element.id).sort((a: FormElementInstance, b: FormElementInstance) => a.index - b.index).map((element, index) => {
+                return <div
+                    className={cn('h-full grow grid w-full ',
+                        String(element.extraAttributes.span) == "1" && "col-span-1",
+                        String(element.extraAttributes.span) == "2" && "col-span-2",
+                        String(element.extraAttributes.span) == "3" && "col-span-3",
+                        String(element.extraAttributes.span) == "4" && "col-span-4",
+                        String(element.extraAttributes.span) == "5" && "col-span-5",
+                        String(element.extraAttributes.span) == "6" && "col-span-6",
+                        String(element.extraAttributes.span) == "7" && "col-span-7",
+                        String(element.extraAttributes.span) == "8" && "col-span-8",
+                        String(element.extraAttributes.span) == "9" && "col-span-9",
+                        String(element.extraAttributes.span) == "10" && "col-span-10",
+                        String(element.extraAttributes.span) == "11" && "col-span-11",
+                        String(element.extraAttributes.span) == "12" && "col-span-12",
+                        String(element.extraAttributes.span) == "full" && "col-span-full",
+                    )}
+                    key={element.id}
+                >
+                    <DesignerElementWrapper element={element} index={index} row={true} />
+                </div>
+            })}
+        </div>
+    </div >
 }
 
 function PropertiesComponent({

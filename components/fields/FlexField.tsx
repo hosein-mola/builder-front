@@ -131,9 +131,26 @@ function FormComponent({
     submitValue?: SubmitFunction,
     defaultValue?: string
 }) {
+    const { elements } = useDesigner();
+
     const element = elementInstance as CustomInstance;
-    const { title } = element.extraAttributes;
-    return <p className='text-xl'>{title}</p>
+
+    return <div
+        dir='rtl'
+        className={cn('flex')}
+        style={{
+            ...elementInstance.extraAttributes,
+            gap: elementInstance.extraAttributes['gap'] + 'rem',
+            minHeight: elementInstance.extraAttributes['minHeight'] + 'rem',
+            padding: elementInstance.extraAttributes['padding'] + elementInstance.extraAttributes['paddingUnit']
+        }}
+    >
+        {elements.filter(el => el.parentId == element.id).sort((a: FormElementInstance, b: FormElementInstance) => a.index - b.index).map((element: FormElementInstance, index) => {
+            console.log(element);
+            const FormElementInstance = FormElements[element.type].formComponent;
+            return <>{<FormElementInstance key={element.id} elementInstance={element} />}</>;
+        })}
+    </div >
 }
 
 function PropertiesComponent({
@@ -382,7 +399,6 @@ function PropertiesComponent({
                                         <SelectValue placeholder="alignSelf" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="auto">start</SelectItem>
                                         <SelectItem value="flex-start">start</SelectItem>
                                         <SelectItem value="flex-end">end</SelectItem>
                                         <SelectItem value="center">center</SelectItem>

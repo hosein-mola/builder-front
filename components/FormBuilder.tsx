@@ -31,16 +31,16 @@ function FormBuilder({ form }: { form: Form }) {
     const pointerSensor = useSensor(PointerSensor, {
         activationConstraint: {
             distance: 0,
-            delay: 10,
-            tolerance: 0
+            delay: 250,
+            tolerance: 10
         },
     });
 
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: {
             distance: 0,
-            delay: 10,
-            tolerance: 0
+            delay: 250,
+            tolerance: 10
         }
     });
 
